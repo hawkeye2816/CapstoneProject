@@ -14,8 +14,8 @@ FirFilter::~FirFilter()
 
 unsigned short FirFilter::Apply(unsigned short sample)
 {
-	int centeredSample = (int)(sample >> 4);
-	centeredSample -= 1 << 11;
+	// center the 16-bit sample around the middle
+	int centeredSample = (int)sample - (1 << 15);
 
 	// first tap, no delay
 	long long sampOut = centeredSample * _coefficients[0];
@@ -30,6 +30,6 @@ unsigned short FirFilter::Apply(unsigned short sample)
 	_delayLine->Shift(centeredSample);
 
 	// return filter output converted back to UINT_16
-	int retSamp = (sampOut >> 24) + (1 << 11);
-	return (unsigned short)(retSamp << 4);
+	int retSamp = (sampOut >> 24) + (1 << 15);
+	return retSamp;
 }

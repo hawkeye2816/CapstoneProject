@@ -54,6 +54,10 @@ void Loop()
     // read ADC as UINT_16
     unsigned short sample = input.read_u16();
     
+    // the data coming from the ADC is zero padded at the end with 4 zeros
+    // we want this data centered within the buffer
+    sample = sample >> 2;
+    
     // write to SPI
     output.write(sample);
 }
